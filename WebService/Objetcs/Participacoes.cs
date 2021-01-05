@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebService.Objetcs
+﻿namespace WebService.Objetcs
 {
     public class Participacoes
     {
-        public Participacoes()
-        {
-            participacao = new List<Participacao>();
-        }
-
-        public List<Participacao> participacao { get; set; }
-        public int total_de_funcionarios { get; set; }
-        public decimal total_distribuido { get; set; }
-        public decimal total_disponibilizado { get; set; }
-        public decimal saldo_total_disponibilizado { get; set; }
-
+        /// <summary>
+        /// codigo da matricula do funcionario
+        /// </summary>
+        public string matricula { get; set; }
+        /// <summary>
+        /// Nome do funcionario
+        /// </summary>
+        public string nome { get; set; }
+        /// <summary>
+        /// valor de bonus salarial a ser recebido pelo funcionario
+        /// </summary>
+        public string valor_da_participação { get; set; }
     }
 }

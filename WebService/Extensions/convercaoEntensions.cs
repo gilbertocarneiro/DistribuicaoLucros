@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -76,6 +77,20 @@ namespace WebService.Extensions
             {
                 throw;
             }
+        }
+
+        public static string FormatarValorDecimal(this decimal valor)
+        {
+            return string.Format(CultureInfo.GetCultureInfo("pt-BR"), "R$ {0:#,###.00}", valor);
+        }
+
+        public static decimal ToDecimal(this decimal value, int casasDecimais)
+        {
+            if (casasDecimais < 0)
+                throw new ArgumentException("Casas decimais devem ser maior que 0.");
+
+            var modifier = Convert.ToDecimal(0.5 / Math.Pow(10, casasDecimais));
+            return Math.Round(value >= 0 ? value - modifier : value + modifier, casasDecimais);
         }
     }
 }

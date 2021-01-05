@@ -10,6 +10,12 @@ namespace WebService.Models
 {
     public class FuncionarioModel : Database
     {
+        const int MesesAno = 12;
+
+        /// <summary>
+        /// Get Colecao de funcionarios
+        /// </summary>
+        /// <returns>Colecao de funcionarios</returns>
         public List<Funcionario> ColecaoFuncionario()
         {
             try
@@ -29,18 +35,11 @@ namespace WebService.Models
             }
         }
 
-        public decimal TotalSalarioFuncionarios(List<Funcionario> funcionarios)
-        {
-            try
-            {
-                return funcionarios.Sum(x => x.salario_bruto);
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
+        /// <summary>
+        /// calcula o peso por tempo de admissão
+        /// </summary>
+        /// <param name="data_de_admissao"></param>
+        /// <returns>valor do peso</returns>
         public int CalcularPesoAdmissao(DateTime data_de_admissao)
         {
             try
@@ -72,6 +71,12 @@ namespace WebService.Models
             }
         }
 
+        /// <summary>
+        /// calcula o peso por faixa salarial e uma exceção para estagiários
+        /// </summary>
+        /// <param name="salario_bruto"></param>
+        /// <param name="profissao"></param>
+        /// <returns>valor do peso</returns>
         public int CalcularPesoSalario(decimal salario_bruto, string profissao)
         {
             try
@@ -102,6 +107,11 @@ namespace WebService.Models
             }
         }
 
+        /// <summary>
+        /// calcula o peso por área de atuação
+        /// </summary>
+        /// <param name="area"></param>
+        /// <returns>valor do peso</returns>
         public int CalcularPesoAreaAtuacao(string area)
         {
             try
@@ -110,7 +120,7 @@ namespace WebService.Models
                 {
                     return 1;
                 }
-                else if (area == "Contabilidade" || area == "Financeiro" || area == "Tecnologia" )
+                else if (area == "Contabilidade" || area == "Financeiro" || area == "Tecnologia")
                 {
                     return 2;
                 }
@@ -128,13 +138,19 @@ namespace WebService.Models
                 throw;
             }
         }
-        public decimal CalcularBonusSalario(Funcionario funcionario) 
+
+        /// <summary>
+        /// calcula o bonus salarial do funcionarios recebido
+        /// </summary>
+        /// <param name="funcionario"></param>
+        /// <returns>bonus salarial</returns>
+        public decimal CalcularBonusSalario(Funcionario funcionario)
         {
             try
             {
-                decimal SBPTA = funcionario.salario_bruto * CalcularPesoAdmissao(funcionario.data_de_admissao);
-                decimal SBPAA = funcionario.salario_bruto * CalcularPesoAreaAtuacao(funcionario.area);
-                decimal bonus = ((SBPTA + SBPAA) / CalcularPesoSalario(funcionario.salario_bruto, funcionario.cargo)) * 12;
+                decimal SBxPTA = funcionario.salario_bruto * CalcularPesoAdmissao(funcionario.data_de_admissao);
+                decimal SBxPAA = funcionario.salario_bruto * CalcularPesoAreaAtuacao(funcionario.area);
+                decimal bonus = ((SBxPTA + SBxPAA) / CalcularPesoSalario(funcionario.salario_bruto, funcionario.cargo)) * MesesAno;
 
                 return bonus;
             }
@@ -144,6 +160,11 @@ namespace WebService.Models
             }
         }
 
+        /// <summary>
+        /// convert reader para objeto
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns>objeto funcionario</returns>
         private Funcionario DataToFuncionario(SqlDataReader reader)
         {
             return new Funcionario()

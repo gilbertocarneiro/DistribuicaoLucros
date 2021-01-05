@@ -25,7 +25,7 @@ CalcularPesoSalario
 (numeros_salario_minimos >= 5 && numeros_salario_minimos < 8) peso = 3;               
 (numeros_salario_minimos >= 8)  peso 5;
                 
-para efetuar o teste sera necessario apenas executar o projeto via visual studio f5, voce sera redirecionado ao swagger e podera efetuar o teste pelo mesmo.
+para efetuar o teste sera necessario apenas executar o projeto via visual studio, voce sera redirecionado ao swagger e podera efetuar o teste pelo mesmo.
 
 https://localhost:44342/swagger/index.html
 

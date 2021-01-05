@@ -8,8 +8,9 @@ o desafio foi resolvido utilizando oque foi pedido no arquivo enviado.
 
 alguns pontos importantes.
 
-• foi considerado com salario minimo o salario minimo vigente no valor de R$1.100,00
-• devido a uma ambiguidade no valor dos pesos onde o mesmo o valor "igual" nao se encaixava nem acima nem abaixo ou em mais ou em menos foi considerado a seguinte regra.            
+# foi considerado com salario minimo o salario minimo vigente no valor de R$1.100,00
+
+# devido a uma ambiguidade no valor dos pesos onde o mesmo o valor "igual" nao se encaixava nem acima nem abaixo ou em mais ou em menos foi considerado a seguinte regra.            
 CalcularPesoAdmissao
 
 (tempo_de_casa <= 1) peso = 1;              

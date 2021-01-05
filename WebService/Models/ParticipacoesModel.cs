@@ -23,7 +23,7 @@ namespace WebService.Models
                 };
 
                 funcionario.BonusSalarial = funcionarioModel.CalcularBonusSalario(funcionario);
-                participacoes.ValorDaParticipação = funcionario.BonusSalarial.FormatarValorDecimal();
+                participacoes.ValorDaParticipacao = funcionario.BonusSalarial.FormatarValorDecimal();
 
                 participacoesColecao.Add(participacoes);
             }

@@ -13,6 +13,6 @@
         /// <summary>
         /// valor de bonus salarial a ser recebido pelo funcionario
         /// </summary>
-        public string ValorDaParticipação { get; set; }
+        public string ValorDaParticipacao { get; set; }
     }
 }

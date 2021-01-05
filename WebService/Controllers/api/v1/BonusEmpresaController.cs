@@ -17,7 +17,7 @@ namespace WebService.Controllers.api.v1
         /// /// <remarks>
         /// Sample request:
         ///
-        /// TotalDisponibilizado: 1000000
+        /// totalDisponibilizado: 3048706.12,
         /// 
         /// </remarks>
         /// <param name="totalDisponibilizado"></param>

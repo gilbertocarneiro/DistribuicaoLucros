@@ -24,7 +24,7 @@ namespace WebService.Controllers.api.v1
         /// <returns>retorna objeto BonusEmpresa</returns> 
         /// <response code="200">Deve retornar a colecao de funcionarios com seu devido bonus salarial ja calculado juntamente ao saldo restante do lucro que a empresa gostaria de recompensar os funcionarios</response>
 
-        [HttpGet("{TotalDisponibilizado}")]
+        [HttpGet("{totalDisponibilizado}")]
         public async Task<IActionResult> Get(decimal totalDisponibilizado)
         {
             try

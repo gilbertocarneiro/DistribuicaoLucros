@@ -5,6 +5,7 @@ using WebService.Extensions;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace WebService.Models
 {
@@ -16,23 +17,17 @@ namespace WebService.Models
         /// Get Colecao de funcionarios
         /// </summary>
         /// <returns>Colecao de funcionarios</returns>
-        public List<Funcionario> ColecaoFuncionario()
+        public async Task<List<Funcionario>> ColecaoFuncionario()
         {
-            try
+
+            using SqlDataReader sqlDataReader = await ExecutaConsultaReader("SELECT [matricula], [nome], [area], [cargo], [salario_bruto], [data_de_admissao] FROM [dbo].[Funcionario]");
+            if (!sqlDataReader.HasRows) return null;
+            List<Funcionario> funcionariosList = new List<Funcionario>();
+            while (sqlDataReader.Read())
             {
-                using SqlDataReader sqlDataReader = ExecutaConsultaReader("SELECT [matricula], [nome], [area], [cargo], [salario_bruto], [data_de_admissao] FROM [dbo].[Funcionario]");
-                if (!sqlDataReader.HasRows) return null;
-                List<Funcionario> funcionariosList = new List<Funcionario>();
-                while (sqlDataReader.Read())
-                {
-                    funcionariosList.Add(DataToFuncionario(sqlDataReader));
-                }
-                return funcionariosList;
+                funcionariosList.Add(DataToFuncionario(sqlDataReader));
             }
-            catch
-            {
-                throw;
-            }
+            return funcionariosList;
         }
 
         /// <summary>
@@ -40,34 +35,28 @@ namespace WebService.Models
         /// </summary>
         /// <param name="data_de_admissao"></param>
         /// <returns>valor do peso</returns>
-        public int CalcularPesoAdmissao(DateTime data_de_admissao)
+        public Task<int> CalcularPesoAdmissao(DateTime data_de_admissao)
         {
-            try
+
+            TimeSpan tempo = DateTime.Today - data_de_admissao.ToShortDate();
+
+            double tempo_de_casa = tempo.TotalDays / 365;
+
+            if (tempo_de_casa <= 1)
             {
-                TimeSpan tempo = DateTime.Today - data_de_admissao.ToShortDate();
-
-                double tempo_de_casa = tempo.TotalDays / 365;
-
-                if (tempo_de_casa <= 1)
-                {
-                    return 1;
-                }
-                else if (tempo_de_casa > 1 && tempo_de_casa < 3)
-                {
-                    return 2;
-                }
-                else if (tempo_de_casa >= 3 && tempo_de_casa < 8)
-                {
-                    return 3;
-                }
-                else
-                {
-                    return 5;
-                }
+                return Task.FromResult(1);
             }
-            catch (Exception)
+            else if (tempo_de_casa > 1 && tempo_de_casa < 3)
             {
-                throw;
+                return Task.FromResult(2);
+            }
+            else if (tempo_de_casa >= 3 && tempo_de_casa < 8)
+            {
+                return Task.FromResult(3);
+            }
+            else
+            {
+                return Task.FromResult(5);
             }
         }
 
@@ -77,33 +66,27 @@ namespace WebService.Models
         /// <param name="salario_bruto"></param>
         /// <param name="profissao"></param>
         /// <returns>valor do peso</returns>
-        public int CalcularPesoSalario(decimal salario_bruto, string profissao)
+        public Task<int> CalcularPesoSalario(decimal salario_bruto, string profissao)
         {
-            try
-            {
-                decimal salario_minimo = 1100;
-                decimal numeros_salario_minimos = salario_bruto / salario_minimo;
 
-                if (numeros_salario_minimos <= 3 || profissao == "Estagiário")
-                {
-                    return 1;
-                }
-                else if (numeros_salario_minimos > 3 && numeros_salario_minimos < 5)
-                {
-                    return 2;
-                }
-                else if (numeros_salario_minimos >= 5 && numeros_salario_minimos < 8)
-                {
-                    return 3;
-                }
-                else
-                {
-                    return 5;
-                }
-            }
-            catch (Exception)
+            decimal salario_minimo = 1100;
+            decimal numeros_salario_minimos = salario_bruto / salario_minimo;
+
+            if (numeros_salario_minimos <= 3 || profissao == "Estagiário")
             {
-                throw;
+                return Task.FromResult(1);
+            }
+            else if (numeros_salario_minimos > 3 && numeros_salario_minimos < 5)
+            {
+                return Task.FromResult(2);
+            }
+            else if (numeros_salario_minimos >= 5 && numeros_salario_minimos < 8)
+            {
+                return Task.FromResult(3);
+            }
+            else
+            {
+                return Task.FromResult(5);
             }
         }
 
@@ -112,31 +95,26 @@ namespace WebService.Models
         /// </summary>
         /// <param name="area"></param>
         /// <returns>valor do peso</returns>
-        public int CalcularPesoAreaAtuacao(string area)
+        public Task<int> CalcularPesoAreaAtuacao(string area)
         {
-            try
+
+            if (area == "Diretoria")
             {
-                if (area == "Diretoria")
-                {
-                    return 1;
-                }
-                else if (area == "Contabilidade" || area == "Financeiro" || area == "Tecnologia")
-                {
-                    return 2;
-                }
-                else if (area == "Serviços Gerais")
-                {
-                    return 3;
-                }
-                else
-                {
-                    return 5;
-                }
+                return Task.FromResult(1);
             }
-            catch (Exception)
+            else if (area == "Contabilidade" || area == "Financeiro" || area == "Tecnologia")
             {
-                throw;
+                return Task.FromResult(2);
             }
+            else if (area == "Serviços Gerais")
+            {
+                return Task.FromResult(3);
+            }
+            else
+            {
+                return Task.FromResult(5);
+            }
+
         }
 
         /// <summary>
@@ -144,20 +122,13 @@ namespace WebService.Models
         /// </summary>
         /// <param name="funcionario"></param>
         /// <returns>bonus salarial</returns>
-        public decimal CalcularBonusSalario(Funcionario funcionario)
+        public async Task<decimal> CalcularBonusSalario(Funcionario funcionario)
         {
-            try
-            {
-                decimal SBxPTA = funcionario.salario_bruto * CalcularPesoAdmissao(funcionario.data_de_admissao);
-                decimal SBxPAA = funcionario.salario_bruto * CalcularPesoAreaAtuacao(funcionario.area);
-                decimal bonus = ((SBxPTA + SBxPAA) / CalcularPesoSalario(funcionario.salario_bruto, funcionario.cargo)) * MesesAno;
+            decimal SBxPTA = funcionario.Salario_Bruto * await CalcularPesoAdmissao(funcionario.Data_De_Admissao);
+            decimal SBxPAA = funcionario.Salario_Bruto * await CalcularPesoAreaAtuacao(funcionario.Area);
+            decimal bonus = ((SBxPTA + SBxPAA) / await CalcularPesoSalario(funcionario.Salario_Bruto, funcionario.Cargo)) * MesesAno;
 
-                return bonus;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return bonus;
         }
 
         /// <summary>
@@ -165,16 +136,16 @@ namespace WebService.Models
         /// </summary>
         /// <param name="reader"></param>
         /// <returns>objeto funcionario</returns>
-        private Funcionario DataToFuncionario(SqlDataReader reader)
+        private static Funcionario DataToFuncionario(SqlDataReader reader)
         {
             return new Funcionario()
             {
-                matricula = reader[nameof(Funcionario.matricula)].ToString().ToInt(),
-                nome = reader[nameof(Funcionario.nome)].ToString(),
-                area = reader[nameof(Funcionario.area)].ToString(),
-                cargo = reader[nameof(Funcionario.cargo)].ToString(),
-                salario_bruto = reader[nameof(Funcionario.salario_bruto)].ToString().ToDecimal(),
-                data_de_admissao = DateTime.Parse(reader[nameof(Funcionario.data_de_admissao)].ToString())
+                Matricula = reader[nameof(Funcionario.Matricula)].ToString().ToInt(),
+                Nome = reader[nameof(Funcionario.Nome)].ToString(),
+                Area = reader[nameof(Funcionario.Area)].ToString(),
+                Cargo = reader[nameof(Funcionario.Cargo)].ToString(),
+                Salario_Bruto = reader[nameof(Funcionario.Salario_Bruto)].ToString().ToDecimal(),
+                Data_De_Admissao = DateTime.Parse(reader[nameof(Funcionario.Data_De_Admissao)].ToString())
             };
         }
     }

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebService.Models;
+using WebService.Objetcs;
 
 namespace WebService.Controllers.api.v1
 {
@@ -22,16 +24,10 @@ namespace WebService.Controllers.api.v1
         /// <response code="200">Deve retornar a colecao de funcionarios com seu devido bonus salarial ja calculado juntamente ao saldo restante do lucro que a empresa gostaria de recompensar os funcionarios</response>
 
         [HttpGet("{total_disponibilizado}")]
-        public dynamic Get(decimal total_disponibilizado)
+        public async Task<IActionResult> Get(decimal total_disponibilizado)
         {
-            try
-            {
-                return new BonusEmpresaModel().GerarBonusFuncionarios(total_disponibilizado);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            BonusEmpresaModel BonusEmpresaModel = new BonusEmpresaModel();
+            return await BonusEmpresaModel.GerarBonusFuncionarios(total_disponibilizado);
         }
     }
 }

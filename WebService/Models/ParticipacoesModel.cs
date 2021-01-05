@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using WebService.Extensions;
 using WebService.Objetcs;
 
@@ -7,31 +8,27 @@ namespace WebService.Models
 {
     public class ParticipacoesModel
     {
-        public List<Participacoes> GerarParticipacoes(List<Funcionario> funcionarioColecao)
+        public async Task<List<Participacoes>> GerarParticipacoes(List<Funcionario> funcionarioColecao)
         {
-            try
-            {
-                FuncionarioModel funcionarioModel = new FuncionarioModel();
-                List<Participacoes> participacoesColecao = new List<Participacoes>();
 
-                foreach (Funcionario funcionario in funcionarioColecao)
+            FuncionarioModel funcionarioModel = new FuncionarioModel();
+            List<Participacoes> participacoesColecao = new List<Participacoes>();
+
+            foreach (Funcionario funcionario in funcionarioColecao)
+            {
+                Participacoes participacoes = new Participacoes
                 {
-                    Participacoes participacoes = new Participacoes();
+                    Matricula = funcionario.Matricula.ToString().PadLeft(7, '0'),
+                    Nome = funcionario.Nome
+                };
 
-                    participacoes.matricula = funcionario.matricula.ToString().PadLeft(7,'0');
-                    participacoes.nome = funcionario.nome;
-                    funcionario.bonus_salarial = funcionarioModel.CalcularBonusSalario(funcionario);
-                    participacoes.valor_da_participação = funcionario.bonus_salarial.FormatarValorDecimal();
+                funcionario.Bonus_Salarial = await funcionarioModel.CalcularBonusSalario(funcionario);
+                participacoes.Valor_Da_Participação = funcionario.Bonus_Salarial.FormatarValorDecimal();
 
-                    participacoesColecao.Add(participacoes);
-                }
-
-                return participacoesColecao;
+                participacoesColecao.Add(participacoes);
             }
-            catch
-            {
-                throw;
-            }
+
+            return participacoesColecao;
         }
     }
 }

@@ -6,30 +6,30 @@ namespace WebService.Objetcs
     {   /// <summary>
         /// codigo da matricula do funcionario
         /// </summary>
-        public int matricula { get; set; }
+        public int Matricula { get; set; }
         /// <summary>
         /// Nome do funcionario
         /// </summary>
-        public string nome { get; set; }
+        public string Nome { get; set; }
         /// <summary>
         /// area de atuação do funcionario
         /// </summary>
-        public string area { get; set; }
+        public string Area { get; set; }
         /// <summary>
         /// cargo de atuação do funcionario 
         /// </summary>
-        public string cargo { get; set; }
+        public string Cargo { get; set; }
         /// <summary>
         /// valor sem descontos do salario
         /// </summary>
-        public decimal salario_bruto { get; set; }
+        public decimal Salario_Bruto { get; set; }
         /// <summary>
         /// data de admissao do funcionario na empresa
         /// </summary>
-        public DateTime data_de_admissao { get; set; }
+        public DateTime Data_De_Admissao { get; set; }
         /// <summary>
         /// valor de bonus salarial a ser recebido pelo funcionario
         /// </summary>
-        public decimal bonus_salarial { get; set; }
+        public decimal Bonus_Salarial { get; set; }
     }
 }

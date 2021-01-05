@@ -17,7 +17,8 @@ namespace WebService.Controllers.api.v1
         /// /// <remarks>
         /// Sample request:
         ///
-        /// totalDisponibilizado: 3048706.12,
+        /// totalDisponibilizado: 3048706.12 (valor minimo para passar a divisao)
+        /// caso o valor seja insuficiente a distribuição de lucros não estara disponivel.
         /// 
         /// </remarks>
         /// <param name="totalDisponibilizado"></param>

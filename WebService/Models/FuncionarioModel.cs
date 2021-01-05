@@ -20,7 +20,7 @@ namespace WebService.Models
         public async Task<List<Funcionario>> ColecaoFuncionario()
         {
 
-            using SqlDataReader sqlDataReader = await ExecutaConsultaReader("SELECT [matricula], [nome], [area], [cargo], [salario_bruto], [data_de_admissao] FROM [dbo].[Funcionario]");
+            using SqlDataReader sqlDataReader = await ExecutaConsultaReader("SELECT [Matricula], [Nome], [Area], [Cargo], [SalarioBruto], [DataDeAdmissao] FROM [dbo].[Funcionario]");
             if (!sqlDataReader.HasRows) return null;
             List<Funcionario> funcionariosList = new List<Funcionario>();
             while (sqlDataReader.Read())
@@ -33,60 +33,60 @@ namespace WebService.Models
         /// <summary>
         /// calcula o peso por tempo de admissão
         /// </summary>
-        /// <param name="data_de_admissao"></param>
+        /// <param name="dataDeAdmissao"></param>
         /// <returns>valor do peso</returns>
-        public Task<int> CalcularPesoAdmissao(DateTime data_de_admissao)
+        public int CalcularPesoAdmissao(DateTime dataDeAdmissao)
         {
 
-            TimeSpan tempo = DateTime.Today - data_de_admissao.ToShortDate();
+            TimeSpan tempo = DateTime.Today - dataDeAdmissao.ToShortDate();
 
-            double tempo_de_casa = tempo.TotalDays / 365;
+            double tempoDeCasa = tempo.TotalDays / 365;
 
-            if (tempo_de_casa <= 1)
+            if (tempoDeCasa <= 1)
             {
-                return Task.FromResult(1);
+                return 1;
             }
-            else if (tempo_de_casa > 1 && tempo_de_casa < 3)
+            else if (tempoDeCasa > 1 && tempoDeCasa < 3)
             {
-                return Task.FromResult(2);
+                return 2;
             }
-            else if (tempo_de_casa >= 3 && tempo_de_casa < 8)
+            else if (tempoDeCasa >= 3 && tempoDeCasa < 8)
             {
-                return Task.FromResult(3);
+                return 3;
             }
             else
             {
-                return Task.FromResult(5);
+                return 5;
             }
         }
 
         /// <summary>
         /// calcula o peso por faixa salarial e uma exceção para estagiários
         /// </summary>
-        /// <param name="salario_bruto"></param>
+        /// <param name="salarioBruto"></param>
         /// <param name="profissao"></param>
         /// <returns>valor do peso</returns>
-        public Task<int> CalcularPesoSalario(decimal salario_bruto, string profissao)
+        public int CalcularPesoSalario(decimal salarioBruto, string profissao)
         {
 
-            decimal salario_minimo = 1100;
-            decimal numeros_salario_minimos = salario_bruto / salario_minimo;
+            decimal salarioMinimo = 1100;
+            decimal numeroDeSalariosMinimos = salarioBruto / salarioMinimo;
 
-            if (numeros_salario_minimos <= 3 || profissao == "Estagiário")
+            if (numeroDeSalariosMinimos <= 3 || profissao == "Estagiário")
             {
-                return Task.FromResult(1);
+                return 1;
             }
-            else if (numeros_salario_minimos > 3 && numeros_salario_minimos < 5)
+            else if (numeroDeSalariosMinimos > 3 && numeroDeSalariosMinimos < 5)
             {
-                return Task.FromResult(2);
+                return 2;
             }
-            else if (numeros_salario_minimos >= 5 && numeros_salario_minimos < 8)
+            else if (numeroDeSalariosMinimos >= 5 && numeroDeSalariosMinimos < 8)
             {
-                return Task.FromResult(3);
+                return 3;
             }
             else
             {
-                return Task.FromResult(5);
+                return 5;
             }
         }
 
@@ -95,24 +95,24 @@ namespace WebService.Models
         /// </summary>
         /// <param name="area"></param>
         /// <returns>valor do peso</returns>
-        public Task<int> CalcularPesoAreaAtuacao(string area)
+        public int CalcularPesoAreaAtuacao(string area)
         {
 
             if (area == "Diretoria")
             {
-                return Task.FromResult(1);
+                return 1;
             }
             else if (area == "Contabilidade" || area == "Financeiro" || area == "Tecnologia")
             {
-                return Task.FromResult(2);
+                return 2;
             }
             else if (area == "Serviços Gerais")
             {
-                return Task.FromResult(3);
+                return 3;
             }
             else
             {
-                return Task.FromResult(5);
+                return 5;
             }
 
         }
@@ -122,11 +122,11 @@ namespace WebService.Models
         /// </summary>
         /// <param name="funcionario"></param>
         /// <returns>bonus salarial</returns>
-        public async Task<decimal> CalcularBonusSalario(Funcionario funcionario)
+        public decimal CalcularBonusSalario(Funcionario funcionario)
         {
-            decimal SBxPTA = funcionario.Salario_Bruto * await CalcularPesoAdmissao(funcionario.Data_De_Admissao);
-            decimal SBxPAA = funcionario.Salario_Bruto * await CalcularPesoAreaAtuacao(funcionario.Area);
-            decimal bonus = ((SBxPTA + SBxPAA) / await CalcularPesoSalario(funcionario.Salario_Bruto, funcionario.Cargo)) * MesesAno;
+            decimal sBxPTA = funcionario.SalarioBruto * CalcularPesoAdmissao(funcionario.DataDeAdmissao);
+            decimal sBxPAA = funcionario.SalarioBruto * CalcularPesoAreaAtuacao(funcionario.Area);
+            decimal bonus = ((sBxPTA + sBxPAA) / CalcularPesoSalario(funcionario.SalarioBruto, funcionario.Cargo)) * MesesAno;
 
             return bonus;
         }
@@ -144,8 +144,8 @@ namespace WebService.Models
                 Nome = reader[nameof(Funcionario.Nome)].ToString(),
                 Area = reader[nameof(Funcionario.Area)].ToString(),
                 Cargo = reader[nameof(Funcionario.Cargo)].ToString(),
-                Salario_Bruto = reader[nameof(Funcionario.Salario_Bruto)].ToString().ToDecimal(),
-                Data_De_Admissao = DateTime.Parse(reader[nameof(Funcionario.Data_De_Admissao)].ToString())
+                SalarioBruto = reader[nameof(Funcionario.SalarioBruto)].ToString().ToDecimal(),
+                DataDeAdmissao = DateTime.Parse(reader[nameof(Funcionario.DataDeAdmissao)].ToString())
             };
         }
     }

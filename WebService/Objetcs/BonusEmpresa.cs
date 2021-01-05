@@ -18,19 +18,19 @@ namespace WebService.Objetcs
         /// <summary>
         /// Quantidade total de funcionarios na empresa
         /// </summary>
-        public int Total_De_Funcionarios { get; set; }
+        public int TotalDeFuncionarios { get; set; }
         /// <summary>
         /// Soma do que foi pago em PL a todos os funcionários
         /// </summary>
-        public decimal Total_Distribuido { get; set; }
+        public decimal TotalDistribuido { get; set; }
         /// <summary>
         /// O valor que a empresa desejava distribuir
         /// </summary>
-        public decimal Total_Disponibilizado { get; set; }
+        public decimal TotalDisponibilizado { get; set; }
         /// <summary>
         /// Total disponibilizado menos o total distribuido
         /// </summary>
-        public decimal Saldo_Total_Disponibilizado { get; set; }
+        public decimal SaldoTotalDisponibilizado { get; set; }
 
     }
 }

@@ -22,14 +22,14 @@ namespace WebService.Objetcs
         /// <summary>
         /// valor sem descontos do salario
         /// </summary>
-        public decimal Salario_Bruto { get; set; }
+        public decimal SalarioBruto { get; set; }
         /// <summary>
         /// data de admissao do funcionario na empresa
         /// </summary>
-        public DateTime Data_De_Admissao { get; set; }
+        public DateTime DataDeAdmissao { get; set; }
         /// <summary>
         /// valor de bonus salarial a ser recebido pelo funcionario
         /// </summary>
-        public decimal Bonus_Salarial { get; set; }
+        public decimal BonusSalarial { get; set; }
     }
 }

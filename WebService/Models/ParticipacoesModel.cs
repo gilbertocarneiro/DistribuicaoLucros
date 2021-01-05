@@ -8,7 +8,7 @@ namespace WebService.Models
 {
     public class ParticipacoesModel
     {
-        public async Task<List<Participacoes>> GerarParticipacoes(List<Funcionario> funcionarioColecao)
+        public List<Participacoes> GerarParticipacoes(List<Funcionario> funcionarioColecao)
         {
 
             FuncionarioModel funcionarioModel = new FuncionarioModel();
@@ -22,8 +22,8 @@ namespace WebService.Models
                     Nome = funcionario.Nome
                 };
 
-                funcionario.Bonus_Salarial = await funcionarioModel.CalcularBonusSalario(funcionario);
-                participacoes.Valor_Da_Participação = funcionario.Bonus_Salarial.FormatarValorDecimal();
+                funcionario.BonusSalarial = funcionarioModel.CalcularBonusSalario(funcionario);
+                participacoes.ValorDaParticipação = funcionario.BonusSalarial.FormatarValorDecimal();
 
                 participacoesColecao.Add(participacoes);
             }

@@ -8,11 +8,11 @@ namespace WebService.Tools
         public object Value;
         public SqlDbType Type;
 
-        public ParametroSql(string ParameterName, object Value, SqlDbType Type)
+        public ParametroSql(string parameterName, object value, SqlDbType type)
         {
-            this.ParameterName = ParameterName;
-            this.Value = Value;
-            this.Type = Type;
+            this.ParameterName = parameterName;
+            this.Value = value;
+            this.Type = type;
         }
     }
 }

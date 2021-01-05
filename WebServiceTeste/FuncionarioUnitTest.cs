@@ -13,12 +13,12 @@ namespace WebServiceTeste
         {
             try
             {
-                List<Funcionario> FuncionarioColecao = new List<Funcionario>();
+                List<Funcionario> funcionarioColecao = new List<Funcionario>();
                 FuncionarioModel funcionarioModel = new FuncionarioModel();
 
-                FuncionarioColecao = await funcionarioModel.ColecaoFuncionario();
+                funcionarioColecao = await funcionarioModel.ColecaoFuncionario();
 
-                Assert.NotEmpty(FuncionarioColecao);
+                Assert.NotEmpty(funcionarioColecao);
             }          
             catch (Exception ex)
             {
@@ -31,13 +31,13 @@ namespace WebServiceTeste
         [InlineData("2015-5-20", 3)]
         [InlineData("2019-1-1", 2)]
         [InlineData("2021-1-1", 1)]
-        public async void CalcularPesoPorAdmissao(string Date, int Expected)
+        public void CalcularPesoPorAdmissao(string date, int expected)
         {
             try
             {
-                FuncionarioModel FuncionarioModel = new FuncionarioModel();
+                FuncionarioModel funcionarioModel = new FuncionarioModel();
 
-                Assert.Equal(Expected, await FuncionarioModel.CalcularPesoAdmissao(Convert.ToDateTime(Date)));
+                Assert.Equal(expected, funcionarioModel.CalcularPesoAdmissao(Convert.ToDateTime(date)));
             }
             catch (Exception ex)
             {
@@ -51,13 +51,13 @@ namespace WebServiceTeste
         [InlineData(7000, "Programador", 3)]
         [InlineData(18500, "Estagiário", 1)]
         [InlineData(18500, "Diretor", 5)]
-        public async void CalcularPesoPorSalario(decimal Salario_Bruto, string Profissao, int Expected)
+        public void CalcularPesoPorSalario(decimal salarioBruto, string profissao, int expected)
         {
             try
             {
-                FuncionarioModel FuncionarioModel = new FuncionarioModel();
+                FuncionarioModel funcionarioModel = new FuncionarioModel();
 
-                Assert.Equal(Expected,await FuncionarioModel.CalcularPesoSalario(Salario_Bruto, Profissao));
+                Assert.Equal(expected,funcionarioModel.CalcularPesoSalario(salarioBruto, profissao));
             }
             catch (Exception ex)
             {
@@ -72,13 +72,13 @@ namespace WebServiceTeste
         [InlineData("Tecnologia", 2)]
         [InlineData("Serviços Gerais", 3)]
         [InlineData("Relacionamento com o Cliente", 5)]
-        public async void CalcularPesoPorArea(string Area, int Expected)
+        public void CalcularPesoPorArea(string area, int expected)
         {
             try
             {
-                FuncionarioModel FuncionarioModel = new FuncionarioModel();
+                FuncionarioModel funcionarioModel = new FuncionarioModel();
 
-                Assert.Equal(Expected, await FuncionarioModel.CalcularPesoAreaAtuacao(Area));
+                Assert.Equal(expected, funcionarioModel.CalcularPesoAreaAtuacao(area));
             }
             catch (Exception ex)
             {
@@ -93,11 +93,11 @@ namespace WebServiceTeste
             {
                 decimal Expected = 83791.20m;
                 List<Funcionario> funcionarioColecao = new List<Funcionario>();
-                FuncionarioModel FuncionarioModel = new FuncionarioModel();
+                FuncionarioModel funcionarioModel = new FuncionarioModel();
 
-                funcionarioColecao = await FuncionarioModel.ColecaoFuncionario();
+                funcionarioColecao = await funcionarioModel.ColecaoFuncionario();
 
-                Assert.Equal(Expected, await FuncionarioModel.CalcularBonusSalario(funcionarioColecao[1]));
+                Assert.Equal(Expected, funcionarioModel.CalcularBonusSalario(funcionarioColecao[1]));
             }
             catch (Exception ex)
             {

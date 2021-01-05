@@ -14,41 +14,29 @@ namespace WebService.Models
         /// <summary>
         /// Monta o objeto BonusEmpresa para chegar no montante repartido de bonus salarial aos funcionarios
         /// </summary>
-        /// <param name="total_disponibilizado"></param>
+        /// <param name="totalDisponibilizado"></param>
         /// <returns>Objeto BonusEmpresa</returns>
-        public async Task<IActionResult> GerarBonusFuncionarios(decimal total_disponibilizado)
+        public async Task<BonusEmpresa> GerarBonusFuncionarios(decimal totalDisponibilizado)
         {
-            try
+            ParticipacoesModel participacoesModel = new ParticipacoesModel();
+            FuncionarioModel funcionarioModel = new FuncionarioModel();
+            List<Funcionario> funcionarioColecao = await funcionarioModel.ColecaoFuncionario();
+
+            BonusEmpresa bonusEmpresa = new BonusEmpresa
             {
-                ParticipacoesModel participacoesModel = new ParticipacoesModel();
-                FuncionarioModel funcionarioModel = new FuncionarioModel();
-                List<Funcionario> funcionarioColecao = await funcionarioModel.ColecaoFuncionario();
+                ParticipacoesColecao = participacoesModel.GerarParticipacoes(funcionarioColecao)
+            };
 
-                BonusEmpresa bonusEmpresa = new BonusEmpresa
-                {
-                    ParticipacoesColecao = await participacoesModel.GerarParticipacoes(funcionarioColecao)
-                };
+            bonusEmpresa.TotalDeFuncionarios = bonusEmpresa.ParticipacoesColecao.Count;
+            bonusEmpresa.TotalDisponibilizado = totalDisponibilizado;
+            bonusEmpresa.TotalDistribuido = funcionarioColecao.Sum(x => x.BonusSalarial).ToDecimal(2);
+            bonusEmpresa.SaldoTotalDisponibilizado = (bonusEmpresa.TotalDisponibilizado - bonusEmpresa.TotalDistribuido).ToDecimal(2);
 
-                bonusEmpresa.Total_De_Funcionarios = bonusEmpresa.ParticipacoesColecao.Count;
-                bonusEmpresa.Total_Disponibilizado = total_disponibilizado;
-                bonusEmpresa.Total_Distribuido = funcionarioColecao.Sum(x => x.Bonus_Salarial).ToDecimal(2);
-                bonusEmpresa.Saldo_Total_Disponibilizado = (bonusEmpresa.Total_Disponibilizado - bonusEmpresa.Total_Distribuido).ToDecimal(2);
-
-
-                if (bonusEmpresa.Saldo_Total_Disponibilizado < 0)
-                {
-                    throw new ArgumentException($"O valor informado pela empresa é insuficiente para fazer a divisão de lucros.");
-                }
-                return new JsonResult(bonusEmpresa);
-            }
-            catch (Exception ex)
+            if (bonusEmpresa.SaldoTotalDisponibilizado < 0)
             {
-                return new JsonResult(ex.Message)
-                {
-                    StatusCode = StatusCodes.Status500InternalServerError 
-                };
+                throw new ArgumentException($"O valor informado pela empresa é insuficiente para fazer a divisão de lucros.");
             }
-
+            return bonusEmpresa;
         }
     }
 }
